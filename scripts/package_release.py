@@ -54,7 +54,7 @@ def main() -> None:
     parser.add_argument("--tag", default=f"v{__version__}", help="Git 发行标签，必须等于程序版本")
     arguments = parser.parse_args()
     for file in package_release(ROOT, arguments.tag):
-        print(f"生成：{file}")
+        print(f"Created: {file.name}")
 
 
 if __name__ == "__main__":
