@@ -7,12 +7,14 @@
 <p>为通过 Git 安装的 <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> 提供中文桌面界面、后台检查、可选自动更新和失败恢复。</p>
 
 <p>
+  <a href="https://github.com/snake-aabb-wtf/deepseek-harness-updater/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/snake-aabb-wtf/deepseek-harness-updater/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/snake-aabb-wtf/deepseek-harness-updater/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/snake-aabb-wtf/deepseek-harness-updater?style=flat-square"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-23405f?style=flat-square"></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square">
   <img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-2563eb?style=flat-square">
 </p>
 
-<p><strong><a href="../../releases/latest">下载 Windows 版</a></strong> · <a href="#三步开始">三步开始</a> · <a href="#从-python-源码运行">运行方式</a> · <a href="#哪些安装方式可以识别">适用范围</a></p>
+<p><strong><a href="https://github.com/snake-aabb-wtf/deepseek-harness-updater/releases/latest">下载 Windows 版</a></strong> · <a href="#三步开始">三步开始</a> · <a href="#从-python-源码运行">运行方式</a> · <a href="#哪些安装方式可以识别">适用范围</a></p>
 
 </div>
 
@@ -43,7 +45,7 @@
 
 ## 三步开始
 
-1. 从 [最新 Release](../../releases/latest) 下载 `HarnessUpdater-*-Windows-x64.zip`，解压后双击 `HarnessUpdater.exe`。也可以直接下载同一页的 EXE；`SHA256SUMS.txt` 可用来校验下载文件。首次打开无需管理员权限。
+1. 从 [最新 Release](https://github.com/snake-aabb-wtf/deepseek-harness-updater/releases/latest) 下载 `HarnessUpdater-*-Windows-x64.zip`，解压后双击 `HarnessUpdater.exe`。也可以直接下载同一页的 EXE；`SHA256SUMS.txt` 可用来校验下载文件。首次打开无需管理员权限。
 2. 点击 **选择目录**，选中 `git clone` 得到的 `deepseek-harness` **根目录**，其中应有 `package.json` 和 `.git`。点击 **检查更新**，阅读本机与官方 Commit、构建状态和检查提示。
 3. 退出正在运行的 Harness，点击 **一键更新**；如果源码已是最新但还未构建，按钮会显示 **安装依赖并构建**。等日志显示完成，再按原有方式启动 Harness，例如在源码目录执行 `pnpm dsh web`。
 
