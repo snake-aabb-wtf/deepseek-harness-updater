@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to release
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Verify, build, and publish Windows release
+    runs-on: windows-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Check tag matches application version
+        shell: pwsh
+        run: |
+          python -c "from harness_updater import __version__; import os, sys; expected = 'v' + __version__; actual = os.environ['RELEASE_TAG']; print(f'{actual} / expected {expected}'); sys.exit(actual != expected)"
+          if ($LASTEXITCODE -ne 0) { throw '发行标签与程序版本不一致。' }
+      - name: Install runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Unit and Git integration tests
+        run: python -m unittest discover -s tests -v
+      - name: Build EXE, ZIP, and checksums
+        shell: pwsh
+        run: .\build.ps1
+      - name: Verify tagged release package
+        shell: pwsh
+        run: |
+          python scripts/package_release.py --tag $env:RELEASE_TAG
+          if ($LASTEXITCODE -ne 0) { throw '发行文件校验失败。' }
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = $env:RELEASE_TAG.Substring(1)
+          $assets = @('dist/HarnessUpdater.exe', "dist/HarnessUpdater-$version-Windows-x64.zip", 'dist/SHA256SUMS.txt')
+          $existing = @(gh release view $env:RELEASE_TAG --json assets --jq '.assets[].name' 2>$null)
+          if ($LASTEXITCODE -eq 0) {
+            $expected = @('HarnessUpdater.exe', "HarnessUpdater-$version-Windows-x64.zip", 'SHA256SUMS.txt')
+            if (@(Compare-Object $existing $expected).Count -ne 0) { throw '现有 Release 的附件不完整，需要人工检查。' }
+            Write-Output "Release $env:RELEASE_TAG 已发布，附件完整。"
+          } else {
+            gh release create $env:RELEASE_TAG @assets --verify-tag --generate-notes --title "Harness 更新助手 $env:RELEASE_TAG" --notes 'Windows x64 单文件版；运行更新助手无需另装 Python。更新 Harness 源码仍需要 Git 和满足目标版本要求的 Node.js。下载 ZIP 后解压，双击 HarnessUpdater.exe。'
+            if ($LASTEXITCODE -ne 0) { throw 'GitHub Release 发布失败。' }
+          }

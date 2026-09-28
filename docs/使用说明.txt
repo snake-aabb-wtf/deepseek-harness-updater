@@ -1,0 +1,32 @@
+Harness 更新助手 v0.1.0 — Windows x64
+
+1. 双击 HarnessUpdater.exe。更新助手自身无需安装 Python。
+2. 点击“选择目录”，选择通过 git clone 安装的 deepseek-harness 根目录。
+   该目录中应有 package.json，并保留 .git；不要选择 .dsh、node_modules 或 apps/cli。
+3. 点击“检查更新”，查看本机和官方最新 Commit。
+4. 先退出正在运行的 Harness，再点击“一键更新”或“安装依赖并构建”。
+5. 日志提示完成后，按原来的方式重新启动 Harness。
+
+电脑仍需装有 Git，以及满足目标 Harness 版本要求的 Node.js。
+程序会下载并缓存目标版本要求的 pnpm，无需全局配置 pnpm。
+
+默认每 15 分钟自动检查，但不会自动改动源码。
+需要自动更新时，勾选“发现新版本时自动更新”。
+关闭窗口后进入系统托盘，后台检查继续；彻底退出请点击界面或托盘菜单的“退出”。
+“登录 Windows 后启动”为可选项，不需要管理员权限；取消勾选即可移除启动项。
+
+本地有修改、分支分叉或 Harness 正在运行时，会暂停更新并说明原因。
+依赖安装或构建失败，会尝试恢复旧 Commit 并重新构建；请等待恢复结束再退出。
+若上次更新被中断，先关闭 Harness，然后按提示点击“恢复旧版本”。
+旧 Commit 是源码备份，不是完整磁盘快照；配置和会话文件保留在原处。
+
+本版支持 Git 源码安装。ZIP 解压目录、npm/npx 缓存、桌面安装包和 Python SDK
+无法通过这套源码更新流程更新，也不能在缺少 Git 历史时准确识别原 Commit。
+
+默认日志与配置目录：
+%LOCALAPPDATA%\DeepSeekHarnessUpdater
+
+官方 Harness 仓库：
+https://github.com/deepseek-ai/deepseek-harness
+
+本程序是独立更新辅助工具；完整源码、详细说明和验证记录在项目 README.md 与 docs 中。

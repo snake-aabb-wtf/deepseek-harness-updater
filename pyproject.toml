@@ -1,0 +1,14 @@
+[project]
+name = "deepseek-harness-updater"
+version = "0.1.0"
+description = "A Chinese GUI and safe source-update daemon for DeepSeek Harness"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = ["psutil>=6.0,<8", "Pillow>=10.4,<13", "pystray>=0.19.5,<1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
